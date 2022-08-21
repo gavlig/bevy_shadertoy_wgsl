@@ -555,15 +555,15 @@ fn update_common_uniform(
 ) {
     // update resolution
     changed_window_size.0 = false;
-    for _window_resize in window_resize_event.iter() {
+    for window_resize in window_resize_event.iter() {
         // canvas_size.width = common_uniform.i_resolution.x as u32;
         // canvas_size.height = common_uniform.i_resolution.y as u32;
 
-        // common_uniform.i_resolution.x = (window_resize.width * (1. - canvas.borders)).floor();
-        // common_uniform.i_resolution.y = (window_resize.height * (1. - canvas.borders)).floor();
+        common_uniform.i_resolution.x = (window_resize.width * (1. - canvas.borders)).floor();
+        common_uniform.i_resolution.y = (window_resize.height * (1. - canvas.borders)).floor();
 
-        common_uniform.i_resolution.x = (canvas.width as f32 * (1. - canvas.borders)).floor();
-        common_uniform.i_resolution.y = (canvas.height as f32 * (1. - canvas.borders)).floor();
+        // common_uniform.i_resolution.x = (canvas.width as f32 * (1. - canvas.borders)).floor();
+        // common_uniform.i_resolution.y = (canvas.height as f32 * (1. - canvas.borders)).floor();
         changed_window_size.0 = true;
 
         for (mut sprite, _, image_handle) in query.iter_mut() {
