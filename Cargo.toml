@@ -72,3 +72,11 @@ path = "examples/fire/fire.rs"
 [[example]]
 name = "dry_ice"
 path = "examples/dry_ice/dry_ice.rs"
+
+[[example]]
+name = "sunset"
+path = "examples/sunset/sunset.rs"
+
+[[example]]
+name = "nightsky"
+path = "examples/nightsky/nightsky.rs"
