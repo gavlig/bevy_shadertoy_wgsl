@@ -300,6 +300,32 @@ pub fn make_and_load_shaders2(
     }
 }
 
+pub fn make_and_load_shaders3(
+    shadertoy_name: &str,
+    asset_server: &Res<AssetServer>,
+    include_debugger: bool,
+) -> ShaderHandles {
+    format_and_save_shader2(shadertoy_name, "image", include_debugger);
+    format_and_save_shader2(shadertoy_name, "buffer_a", false);
+    format_and_save_shader2(shadertoy_name, "buffer_b", false);
+    format_and_save_shader2(shadertoy_name, "buffer_c", false);
+    format_and_save_shader2(shadertoy_name, "buffer_d", false);
+
+    let image_shader_handle = asset_server.load(&format!("shadertoy/{}/build/image.wgsl", shadertoy_name));
+    let texture_a_shader = asset_server.load(&format!("shadertoy/{}/build/buffer_a.wgsl", shadertoy_name));
+    let texture_b_shader = asset_server.load(&format!("shadertoy/{}/build/buffer_b.wgsl", shadertoy_name));
+    let texture_c_shader = asset_server.load(&format!("shadertoy/{}/build/buffer_c.wgsl", shadertoy_name));
+    let texture_d_shader = asset_server.load(&format!("shadertoy/{}/build/buffer_d.wgsl", shadertoy_name));
+
+    ShaderHandles {
+        image_shader: image_shader_handle,
+        texture_a_shader,
+        texture_b_shader,
+        texture_c_shader,
+        texture_d_shader,
+    }
+}
+
 // This function uses the std library and isn't compatible with wasm
 fn format_and_save_shader(example: &str, buffer_type: &str, include_debugger: bool) {
     let common_prelude = include_str!("./templates/common_prelude.wgsl");
@@ -334,6 +360,42 @@ fn format_and_save_shader(example: &str, buffer_type: &str, include_debugger: bo
     let folder = format!("./assets/shaders/{}", example);
     let path = format!("{}/{}.wgsl", folder, buffer_type);
     println!("{}", path);
+    let _ = fs::create_dir(folder);
+    fs::write(path, shader_content).expect("Unable to write file");
+}
+
+// This function uses the std library and isn't compatible with wasm
+fn format_and_save_shader2(shadertoy_name: &str, buffer_type: &str, include_debugger: bool) {
+    let common_prelude = include_str!("./templates/common_prelude.wgsl");
+
+    let template = match buffer_type {
+        "image" => include_str!("./templates/image_template.wgsl"),
+        "buffer_a" => include_str!("./templates/buffer_a_template.wgsl"),
+        "buffer_b" => include_str!("./templates/buffer_b_template.wgsl"),
+        "buffer_c" => include_str!("./templates/buffer_c_template.wgsl"),
+        "buffer_d" => include_str!("./templates/buffer_d_template.wgsl"),
+        _ => include_str!("./templates/buffer_d_template.wgsl"),
+    };
+
+    let mut shader_content = template.replace("{{COMMON_PRELUDE}}", common_prelude);
+
+    if include_debugger {
+        let debbuger_str = include_str!("./templates/debugger.wgsl");
+        shader_content = shader_content.replace("{{DEBUGGER}}", debbuger_str);
+    } else {
+        shader_content = shader_content.replace("{{DEBUGGER}}", "");
+    }
+
+    let path_to_code_block = format!("assets/shadertoy/{}/{}.wgsl", shadertoy_name, buffer_type);
+    let path_to_common = format!("assets/shadertoy/{}/common.wgsl", shadertoy_name);
+
+    let common = fs::read_to_string(path_to_common).expect("could not read file.");
+    let image_main = fs::read_to_string(path_to_code_block).expect("could not read file.");
+
+    let mut shader_content = shader_content.replace("{{COMMON}}", &common);
+    shader_content = shader_content.replace("{{CODE_BLOCK}}", &image_main);
+    let folder = format!("./assets/shadertoy/{}/build", shadertoy_name);
+    let path = format!("{}/{}.wgsl", folder, buffer_type);
     let _ = fs::create_dir(folder);
     fs::write(path, shader_content).expect("Unable to write file");
 }
