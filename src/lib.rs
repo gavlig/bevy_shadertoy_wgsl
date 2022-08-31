@@ -85,7 +85,6 @@ fn setup(
     asset_server: Res<AssetServer>,
     windows: Res<Windows>,
 ) {
-    commands.spawn_bundle(Camera2dBundle::default());
     // let window = windows.primary();
 
     let mut image = Image::new_fill(
