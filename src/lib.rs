@@ -60,6 +60,7 @@ pub struct ShadertoyCanvas {
     pub height: u32,
     pub borders: f32,
     pub position: Vec3,
+    pub active: bool,
 }
 
 #[derive(Clone, ExtractResource)]
@@ -1269,7 +1270,11 @@ impl render_graph::Node for MainNode {
         world: &World,
     ) -> Result<(), render_graph::NodeRunError> {
         let bind_group = world.resource::<MainImageBindGroup>();
-        let canvas_size = world.resource::<ShadertoyCanvas>();
+        let canvas = world.resource::<ShadertoyCanvas>();
+        
+        if !canvas.active {
+            return Ok(());
+        }
 
         let init_pipeline_cache = bind_group.init_pipeline;
         let update_pipeline_cache = bind_group.update_pipeline;
@@ -1294,8 +1299,8 @@ impl render_graph::Node for MainNode {
                     .unwrap();
                 pass.set_pipeline(init_pipeline);
                 pass.dispatch_workgroups(
-                    canvas_size.width / WORKGROUP_SIZE,
-                    canvas_size.height / WORKGROUP_SIZE,
+                    canvas.width / WORKGROUP_SIZE,
+                    canvas.height / WORKGROUP_SIZE,
                     1,
                 );
             }
@@ -1306,8 +1311,8 @@ impl render_graph::Node for MainNode {
                     .unwrap();
                 pass.set_pipeline(update_pipeline);
                 pass.dispatch_workgroups(
-                    canvas_size.width / WORKGROUP_SIZE,
-                    canvas_size.height / WORKGROUP_SIZE,
+                    canvas.width / WORKGROUP_SIZE,
+                    canvas.height / WORKGROUP_SIZE,
                     1,
                 );
             }
