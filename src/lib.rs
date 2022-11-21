@@ -94,7 +94,7 @@ fn setup(
             depth_or_array_layers: 1,
         },
         TextureDimension::D2,
-        &[0, 0, 0, 0],
+        &[0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0],
         TextureFormat::Rgba32Float,
     );
     image.texture_descriptor.usage =
@@ -151,7 +151,7 @@ fn setup(
         },
         TextureDimension::D2,
         // &[255, 255, 255, 255],
-        &[0, 0, 0, 0],
+        &[0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0],
         TextureFormat::Rgba32Float,
     );
     texture_a.texture_descriptor.usage =
@@ -173,7 +173,7 @@ fn setup(
         },
         TextureDimension::D2,
         // &[255, 255, 255, 255],
-        &[0, 0, 0, 0],
+        &[0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0],
         TextureFormat::Rgba32Float,
     );
     texture_b.texture_descriptor.usage =
@@ -195,7 +195,7 @@ fn setup(
         },
         TextureDimension::D2,
         // &[255, 255, 255, 255],
-        &[0, 0, 0, 0],
+        &[0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0],
         TextureFormat::Rgba32Float,
     );
     texture_c.texture_descriptor.usage =
@@ -217,7 +217,7 @@ fn setup(
         },
         TextureDimension::D2,
         // &[255, 255, 255, 255],
-        &[0, 0, 0, 0],
+        &[0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0],
         TextureFormat::Rgba32Float,
     );
     texture_d.texture_descriptor.usage =
