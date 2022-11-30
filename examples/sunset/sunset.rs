@@ -12,18 +12,25 @@ fn main() {
     let mut app = App::new();
 
     app.insert_resource(ClearColor(Color::GRAY))
-        .insert_resource(WindowDescriptor {
-            width: 960.,
-            height: 600.,
-            cursor_visible: true,
-            // present_mode: PresentMode::Immediate, // uncomment for unthrottled FPS
-            ..default()
+		.insert_resource(ShadertoyCanvas {
+            width: 960. as u32,
+            height: 600.0 as u32,
+            borders: 0.0,
+            position: Vec3::new(0.0, 0.0, 0.0),
+			active: true
         })
-        .insert_resource(CanvasSize {
-            width: (960.0_f32 * BORDERS).floor() as u32,
-            height: (600.0_f32 * BORDERS).floor() as u32,
-        })
-        .add_plugins(DefaultPlugins)
+        .add_plugins(DefaultPlugins.set(WindowPlugin {
+			window: WindowDescriptor {
+				width: 960.,
+				height: 600.,
+				cursor_visible: true,
+				monitor: MonitorSelection::Primary,
+				position: WindowPosition::Centered,
+				// present_mode: PresentMode::Immediate, // uncomment for unthrottled FPS
+				..default()
+			},
+			..default()
+		}))
         .add_plugin(ShadertoyPlugin)
         .add_plugin(FrameTimeDiagnosticsPlugin::default())
         .add_plugin(LogDiagnosticsPlugin::default())

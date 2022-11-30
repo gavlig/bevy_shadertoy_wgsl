@@ -17,21 +17,26 @@ fn main() {
     // let h = 720;
 
     app.insert_resource(ClearColor(Color::GRAY))
-        .insert_resource(WindowDescriptor {
-            width: w as f32,
-            height: h as f32,
-            cursor_visible: true,
-            scale_factor_override: Some(1.0),
-            // present_mode: PresentMode::Immediate, // uncomment for unthrottled FPS
-            ..default()
-        })
         .insert_resource(ShadertoyCanvas {
             width: w,
             height: h,
             borders: 0.0,
             position: Vec3::new(0.0, 0.0, 0.0),
+			active: true
         })
-        .add_plugins(DefaultPlugins)
+        .add_plugins(DefaultPlugins.set(WindowPlugin {
+			window: WindowDescriptor {
+				width: w as f32,
+            	height: h as f32,
+				cursor_visible: true,
+				monitor: MonitorSelection::Primary,
+				position: WindowPosition::Centered,
+				scale_factor_override: Some(1.0),
+				// present_mode: PresentMode::Immediate, // uncomment for unthrottled FPS
+				..default()
+			},
+			..default()
+		}))
         .add_plugin(ShadertoyPlugin)
         // .add_plugin(FrameTimeDiagnosticsPlugin::default())
         // .add_plugin(LogDiagnosticsPlugin::default())

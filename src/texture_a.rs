@@ -19,6 +19,7 @@ use crate::{
     ShadertoyState, WORKGROUP_SIZE,
 };
 
+#[derive(Resource)] 
 struct TextureABindGroup {
     // texture_b_bind_group: BindGroup,
     texture_a_bind_group: BindGroup,
@@ -33,7 +34,7 @@ struct TextureABindGroup {
 //     // bind_group: Option<BindGroup>,
 // }
 
-#[derive(Clone, Deref, ExtractResource)]
+#[derive(Clone, Deref, Resource, ExtractResource)]
 pub struct TextureA(pub Handle<Image>);
 
 // pub struct TextureAPipeline {

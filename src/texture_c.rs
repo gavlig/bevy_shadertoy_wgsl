@@ -19,13 +19,14 @@ use crate::{
     ShadertoyState, WORKGROUP_SIZE,
 };
 
+#[derive(Resource)] 
 struct TextureCBindGroup {
     texture_c_bind_group: BindGroup,
     init_pipeline: CachedComputePipelineId,
     update_pipeline: CachedComputePipelineId,
 }
 
-#[derive(Clone, Deref, ExtractResource)]
+#[derive(Clone, Deref, Resource, ExtractResource)]
 pub struct TextureC(pub Handle<Image>);
 
 // pub struct TextureCPipeline {

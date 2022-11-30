@@ -54,7 +54,7 @@ pub const WORKGROUP_SIZE: u32 = 8;
 pub const NUM_PARTICLES: u32 = 256;
 // pub const BORDERS: f32 = 1.0;
 
-#[derive(Clone, ExtractResource, Debug)]
+#[derive(Clone, Resource, ExtractResource, Debug)]
 pub struct ShadertoyCanvas {
     pub width: u32,
     pub height: u32,
@@ -63,14 +63,14 @@ pub struct ShadertoyCanvas {
     pub active: bool,
 }
 
-#[derive(Clone, ExtractResource)]
+#[derive(Clone, Resource, ExtractResource)]
 pub struct ShadertoyTextures {
     font_texture_handle: Handle<Image>,
     rgba_noise_256_handle: Handle<Image>,
     blue_noise_handle: Handle<Image>,
 }
 
-#[derive(Clone, ExtractResource)]
+#[derive(Clone, Resource, ExtractResource)]
 pub struct ShadertoyResources {
     number_of_frames: u32,
     time_since_reset: f32,
@@ -432,7 +432,7 @@ fn format_and_save_shader2(shadertoy_name: &str, buffer_type: &str, include_debu
 
 // use bytemuck::{Pod, Zeroable};
 // #[derive(Clone, Copy, bevy::render::render_resource::ShaderType)]
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Resource)]
 pub struct CommonUniform {
     pub i_resolution: Vec2,
     pub changed_window_size: f32,
@@ -532,7 +532,7 @@ pub struct CommonUniformCrevice {
     pub i_date: crevice::std140::Vec4,
 }
 
-#[derive(Deref)]
+#[derive(Deref, Resource)]
 pub struct ExtractedUniform(pub CommonUniformCrevice);
 
 impl ExtractResource for ExtractedUniform {
@@ -574,6 +574,7 @@ impl ExtractResource for ExtractedUniform {
 //     }
 // }
 
+#[derive(Resource)] 
 pub struct CommonUniformMeta {
     buffer: Buffer,
 }
@@ -670,7 +671,7 @@ fn update_common_uniform(
     }
 
     // update time
-    common_uniform.i_time = time.seconds_since_startup() as f32;
+    common_uniform.i_time = time.elapsed_seconds() as f32;
     common_uniform.i_time_delta = time.delta_seconds() as f32;
     frames_accum.time_since_reset += time.delta_seconds();
     frames_accum.number_of_frames += 1;
@@ -688,7 +689,7 @@ fn update_common_uniform(
 
 pub struct ShadertoyPlugin;
 
-#[derive(Clone, ExtractResource)]
+#[derive(Clone, Resource, ExtractResource)]
 pub struct ShaderHandles {
     pub image_shader: Handle<Shader>,
     pub texture_a_shader: Handle<Shader>,
@@ -787,6 +788,7 @@ impl Plugin for ShadertoyPlugin {
 //     main_image_group_layout: BindGroupLayout,
 // }
 
+#[derive(Resource)] 
 pub struct ShadertoyPipelines {
     pub main_image_group_layout: BindGroupLayout,
     pub abcd_group_layout: BindGroupLayout,
@@ -1038,11 +1040,12 @@ impl FromWorld for ShadertoyPipelines {
 //     }
 // }
 
-#[derive(Deref, Clone, ExtractResource)]
+#[derive(Deref, Clone, Resource, ExtractResource)]
 struct MainImage(Handle<Image>);
 
 // use bevy::core::cast_slice;
 
+#[derive(Resource)] 
 struct MainImageBindGroup {
     main_image_bind_group: BindGroup,
     init_pipeline: CachedComputePipelineId,
@@ -1085,7 +1088,7 @@ pub fn prepare_common_uniform(
     }
 }
 
-#[derive(Deref, Clone, ExtractResource)]
+#[derive(Deref, Clone, Resource, ExtractResource)]
 pub struct ChangedWindowSize(pub bool);
 
 fn extract_stuff_here(

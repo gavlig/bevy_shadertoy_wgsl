@@ -93,9 +93,10 @@ use crate::texture_c::TextureC;
 //     }
 // }
 
-#[derive(Clone, Deref, ExtractResource)]
+#[derive(Clone, Deref, Resource, ExtractResource)]
 pub struct TextureD(pub Handle<Image>);
 
+#[derive(Resource)] 
 struct TextureDBindGroup {
     texture_d_bind_group: BindGroup,
     init_pipeline: CachedComputePipelineId,
